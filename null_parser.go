@@ -2,10 +2,31 @@ package dbcon
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 
 	"github.com/lib/pq"
 )
+
+// ErrExpectedOneRow is used for indicate that expected 1 row
+var ErrExpectedOneRow = errors.New("expected 1 row")
+
+func ExecAffectingOneRow(stmt *sql.Stmt, args ...interface{}) error {
+	r, err := stmt.Exec(args...)
+	if err != nil {
+		return err
+	}
+	rowsAffected, err := r.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected != 1 {
+		return ErrExpectedOneRow
+	}
+
+	return nil
+}
 
 // TimeToNull returns nil if date has zero value
 func TimeToNull(t time.Time) pq.NullTime {
