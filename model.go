@@ -7,4 +7,5 @@ type DBConfig struct {
 	Server   string
 	Port     uint
 	DBName   string
+	SSLMode  string
 }

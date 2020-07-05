@@ -17,13 +17,14 @@ var (
 func GetPsqlConnection(config DBConfig) error {
 	once.Do(func() {
 		domainDataSource := fmt.Sprintf(
-			"%s://%s:%s@%s:%d/%s?sslmode=disable",
+			"%s://%s:%s@%s:%d/%s?sslmode=%s",
 			config.Driver,
 			config.User,
 			config.Password,
 			config.Server,
 			config.Port,
 			config.DBName,
+			config.SSLMode,
 		)
 
 		db, err = sql.Open("postgres", domainDataSource)
